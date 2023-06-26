@@ -3,10 +3,69 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Caprasimo', cursive;
-    font-family: 'Geologica', sans-serif;
+    font-family: 'Playfair Display', serif;
+    box-sizing: border-box;
+    /* font-family: 'Geologica', sans-serif; */
 }
 
+
+/* body-css */
 body{
-    background: gray;
+    background: rgb(48, 1, 53);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+
+/* container - css */
+.container{
+    width:350px;
+    height: 500px;
+    background: rgb(38, 14, 90);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+    color: antiquewhite;
+    letter-spacing: 0.1rem;
+    border-radius: 25px;
+    padding-inline: 30px;
+    
+}
+
+.container::before{
+    content: "";
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    background: conic-gradient(
+        transparent, transparent, transparent, #e4902a
+    );
+    animation: animate 4s linear infinite;
+    animation-delay: -2s;
+}
+
+.container::after{
+    content: "";
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    background: conic-gradient(
+        transparent, transparent, transparent, #ea401a
+    );
+    animation: animate 4s linear infinite;
+}
+
+
+/* keyframe */
+@keyframes animate {
+    0%{
+        transform: rotate(0);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
 }
