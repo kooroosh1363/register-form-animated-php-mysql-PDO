@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/style.css">
     <title>register-form</title>
 </head>
+
 <body>
     <div class="container">
-        <din class="img">
+        <div class="img">
             <div class="box-form">
+                <div class="form">
                 <h2>Register</h2>
                 <div class="box-input">
                     <input type="text" name="user-name" id="name" placeholder="John Doe">
@@ -25,11 +28,13 @@
                 </div>
                 <div class="box-input">
                     <input type="password" name="confirm" id="conf" placeholder="Same Password">
-                    <label for="conf">Re Password</label>
+                    <label for="conf">RePassword</label>
+                </div>
                 </div>
             </div>
-        </din>
+
+        </div>
     </div>
-    
 </body>
+
 </html>

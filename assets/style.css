@@ -26,14 +26,14 @@ body{
     height: 500px;
     background: rgb(38, 14, 90);
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     position: relative;
     color: antiquewhite;
     letter-spacing: 0.1rem;
-    border-radius: 25px;
-    padding-inline: 30px;
-    
+    border-radius: 15px;
+    padding-inline: 32px;
+    overflow: hidden;
 }
 
 .container::before{
@@ -42,7 +42,7 @@ body{
     width: 650px;
     height: 650px;
     background: conic-gradient(
-        transparent, transparent, transparent, #e4902a
+        transparent, transparent, transparent, #615ce0
     );
     animation: animate 4s linear infinite;
     animation-delay: -2s;
@@ -54,7 +54,7 @@ body{
     width: 650px;
     height: 650px;
     background: conic-gradient(
-        transparent, transparent, transparent, #ea401a
+        transparent, transparent, transparent, #64e40f
     );
     animation: animate 4s linear infinite;
 }
@@ -69,3 +69,42 @@ body{
         transform: rotate(360deg);
     }
 }
+
+/* img-css */
+.img{
+    position: absolute;
+    inset: 5px;
+    background-color: #0c1950;
+    z-index: 1;
+    border-radius: 15px;
+}
+
+/* box-form */
+.box-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+/* form-css */
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form h2{
+    font-size: 35px;
+    text-align: center;
+
+} 
+
+.form .box-input{
+    width: 300px;
+    margin: 20px 0;
+    border-bottom: 2px solid #fff;
+    position: relative;
+}
+
