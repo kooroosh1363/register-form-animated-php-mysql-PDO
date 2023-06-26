@@ -23,7 +23,7 @@ body{
 /* container - css */
 .container{
     width:400px;
-    height: 600px;
+    height: 500px;
     background: rgb(38, 14, 90);
     display: flex;
     justify-content: center;
