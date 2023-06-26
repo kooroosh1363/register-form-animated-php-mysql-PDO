@@ -15,21 +15,26 @@
                 <div class="form">
                 <h2>Register</h2>
                 <div class="box-input">
-                    <input type="text" name="user-name" id="name" placeholder="John Doe">
+                    <input type="text" name="user-name" id="name" required>
                     <label for="name">User Name</label>
                 </div>
                 <div class="box-input">
-                    <input type="email" name="email" id="email" placeholder="John Doe@gmail.com">
+                    <input type="email" name="email" id="email" required>
                     <label for="email">Email</label>
                 </div>
                 <div class="box-input">
-                    <input type="password" name="password" id="pass" placeholder="More Than 6 Char">
+                    <input type="password" name="password" id="pass" required>
                     <label for="pass">Password</label>
                 </div>
                 <div class="box-input">
-                    <input type="password" name="confirm" id="conf" placeholder="Same Password">
+                    <input type="password" name="confirm" id="conf" required>
                     <label for="conf">RePassword</label>
                 </div>
+                <div class="group">
+                    <a href="#">Forget Paassword</a>
+                    <a href="#">Sign In</a>
+                </div>
+                <button class="btn">Sign In</button>
                 </div>
             </div>
 
