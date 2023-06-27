@@ -22,9 +22,9 @@ body{
 
 /* container - css */
 .container{
-    width:400px;
-    height: 500px;
-    background: rgb(38, 14, 90);
+    width:450px;
+    height: 550px;
+    background: rgb(140, 121, 182);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,7 +42,7 @@ body{
     width: 730px;
     height: 730px;
     background: conic-gradient(
-        transparent, transparent, transparent, #615ce0
+        transparent, transparent, transparent, #dbe05c
     );
     animation: animate 4s linear infinite;
     animation-delay: -2s;
