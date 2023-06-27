@@ -1,40 +1,47 @@
-<?php 
+<?php
 
 include "./database/pdo_connection.php";
 
-$error="";
+$error = "";
 
-if(
-    isset($_POST['username']) && $_POST['username'] !== '' 
-    && isset($_POST['email']) && $_POST['email'] !== '' 
-    &&  isset($_POST['password']) && $_POST['password'] !== '' 
-    &&  isset($_POST['confirm']) && $_POST['confirm'] !== '' )
-    {
-        if($_POST['password']===$_POST['confirm']){
-            if(strlen($_POST['password'])>4){
-                if(isset($_POST['sub'])){
-                    $username=$_POST['username'];
-                    $email=$_POST['email'];
-                    $password=$_POST['password'];
-                    $result=$conn->prepare("INSERT INTO users SET username=? ,email=? ,password=?");
-                    $result->bindValue(1,$username);
-                    $result->bindValue(2,$email);
-                    $result->bindValue(3,$password);
+if (
+    isset($_POST['username']) && $_POST['username'] !== ''
+    && isset($_POST['email']) && $_POST['email'] !== ''
+    &&  isset($_POST['password']) && $_POST['password'] !== ''
+    &&  isset($_POST['confirm']) && $_POST['confirm'] !== ''
+) {
+    if ($_POST['password'] === $_POST['confirm']) {
+        if (strlen($_POST['password']) > 4) {
+            $sql = "SELECT * FROM users WHERE email=?";
+            $statement=$conn->prepare($sql);
+            $statement->execute([$_POST['email']]);
+            $user=$statement->fetch();
+            if ($user === false) {
+                if (isset($_POST['sub'])) {
+                    $username = $_POST['username'];
+                    $email = $_POST['email'];
+                    $password = $_POST['password'];
+                    $result = $conn->prepare("INSERT INTO users SET username=? ,email=? ,password=?");
+                    $result->bindValue(1, $username);
+                    $result->bindValue(2, $email);
+                    $result->bindValue(3, $password);
 
                     $result->execute();
                 }
-
             }else{
-                $error ="Password is too short! Must be at least five characters!";
+                $error = "The email is duplicate!";
             }
-
-        }else{
-            $error = "passwords do not match!";
+        } else {
+            $error = "Password is too short! Must be at least five characters!";
         }
-
-    }else{
-        $error="You must fill in all the fields";
+    } else {
+        $error = "passwords do not match!";
     }
+} else {
+    if (!empty($_POST)) {
+        $error = "You must fill in all the fields";
+    }
+}
 
 ?>
 
@@ -77,7 +84,13 @@ if(
                         <a href="#">Sign In</a>
                     </div>
                     <button name="sub" class="btn">Sign In</button>
+                    <section class="sec">
+                        <?php
+                        if ($error !== "") echo $error;
+                        ?>
+                    </section>
                 </form>
+
 
             </div>
 
