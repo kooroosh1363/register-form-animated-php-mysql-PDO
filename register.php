@@ -1,10 +1,51 @@
+<?php 
+
+include "./database/pdo_connection.php";
+
+$error="";
+
+if(
+    isset($_POST['username']) && $_POST['username'] !== '' 
+    && isset($_POST['email']) && $_POST['email'] !== '' 
+    &&  isset($_POST['password']) && $_POST['password'] !== '' 
+    &&  isset($_POST['confirm']) && $_POST['confirm'] !== '' )
+    {
+        if($_POST['password']===$_POST['confirm']){
+            if(strlen($_POST['password'])>4){
+                if(isset($_POST['sub'])){
+                    $username=$_POST['username'];
+                    $email=$_POST['email'];
+                    $password=$_POST['password'];
+                    $result=$conn->prepare("INSERT INTO users SET username=? ,email=? ,password=?");
+                    $result->bindValue(1,$username);
+                    $result->bindValue(2,$email);
+                    $result->bindValue(3,$password);
+
+                    $result->execute();
+                }
+
+            }else{
+                $error ="Password is too short! Must be at least five characters!";
+            }
+
+        }else{
+            $error = "passwords do not match!";
+        }
+
+    }else{
+        $error="You must fill in all the fields";
+    }
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="./assets/style.css"> -->
     <link rel="stylesheet" href="./assets/style.css?v=<?php echo time(); ?>">
     <title>register-form</title>
 </head>
@@ -13,10 +54,10 @@
     <div class="container">
         <div class="img">
             <div class="box-form">
-                <div class="form">
+                <form class="form" action="#" method="Post">
                     <h2>Register</h2>
                     <div class="box-input">
-                        <input type="text" name="user-name" id="name" required>
+                        <input type="text" name="username" id="name" required>
                         <label for="name">User Name</label>
                     </div>
                     <div class="box-input">
@@ -32,11 +73,11 @@
                         <label for="conf">RePassword</label>
                     </div>
                     <div class="group">
-                        <a href="#">Forget Password</a>
+                        <a href="#" style="color:aquamarine;">Forget Password?</a>
                         <a href="#">Sign In</a>
                     </div>
-                    <button class="btn">Sign In</button>
-                </div>
+                    <button name="sub" class="btn">Sign In</button>
+                </form>
 
             </div>
 
