@@ -59,7 +59,7 @@ if (
 
 <body>
     <video autoplay muted loop plays-inline class="video">
-        <source src="./assets/video/rr-(1080p).mp4" type="video/mp4">
+        <source src="./assets/video/ww(2160p).mp4" type="video/mp4">
     </video>
     <div class="container">
 
@@ -84,7 +84,7 @@ if (
                         <label for="conf">RePassword</label>
                     </div>
                     <div class="group">
-                        <a href="#" style="color:#0c1950;">Forget Password?</a>
+                        <a href="#" style="color:#cc979e;">Forget Password?</a>
                         <a href="./login.php">Login</a>
                     </div>
                     <button name="sub" class="btn">Sign In</button>
