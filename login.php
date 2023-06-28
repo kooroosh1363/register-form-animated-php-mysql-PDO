@@ -1,40 +1,35 @@
-<?php 
+<?php
 
 session_start();
 
 include "./database/pdo_connection.php";
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     unset($_SESSION['user']);
 }
 
 
-$error="";
+$error = "";
 
 if (
     isset($_POST['email']) && $_POST['email'] !== ''
     && isset($_POST['password']) && $_POST['password'] !== ''
-    ) {
-        if(isset($_POST['sub'])){
-            $email=$_POST['email'];
-            $password=$_POST['password'];
-            $result=$conn->prepare("SELECT * FROM users WHERE email=? AND password=?");
-            $result->bindValue(1,$email);
-            $result->bindValue(2,$password);
-            $result->execute();
-            if($result->rowCount()>=1){
-                $_SESSION['user']=$_POST['email'];
-                // print_r($_SESSION);
-                header('location:register.php');
-            }else{
-                $error='email or password is incorrect!';
-            }
-
+) {
+    if (isset($_POST['sub'])) {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $result = $conn->prepare("SELECT * FROM users WHERE email=? AND password=?");
+        $result->bindValue(1, $email);
+        $result->bindValue(2, $password);
+        $result->execute();
+        if ($result->rowCount() >= 1) {
+            $_SESSION['user'] = $_POST['email'];
+            // print_r($_SESSION);
+            header('location:register.php');
+        } else {
+            $error = 'email or password is incorrect!';
         }
-    
-
-
-
+    }
 } else {
     if (!empty($_POST)) {
         $error = "You must fill in all the fields";
@@ -56,6 +51,9 @@ if (
 </head>
 
 <body>
+    <video autoplay muted loop plays-inline class="video">
+        <source src="./assets/video/rr-(1080p).mp4" type="video/mp4">
+    </video>
     <div class="container">
         <div class="img">
             <div class="box-form">
@@ -70,7 +68,7 @@ if (
                         <label for="pass">Password</label>
                     </div>
                     <div class="group">
-                        <a href="#" style="color:aquamarine;">Forget Password?</a>
+                        <a href="#" style="color:#0c1950;">Forget Password?</a>
                         <a href="./register.php">Register Now</a>
                     </div>
                     <button name="sub" class="btn">Sign In</button>
