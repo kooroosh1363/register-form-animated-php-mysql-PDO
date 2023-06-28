@@ -41,7 +41,7 @@ body {
     position: absolute;
     width: 730px;
     height: 730px;
-    background: conic-gradient(transparent, transparent, transparent, #dbe05c);
+    background: conic-gradient(transparent, transparent, transparent, #1fcb04) !important;
     animation: animate 4s linear infinite;
     animation-delay: -2s;
 }
@@ -51,7 +51,7 @@ body {
     position: absolute;
     width: 730px;
     height: 730px;
-    background: conic-gradient(transparent, transparent, transparent, #64e40f);
+    background: conic-gradient(transparent, transparent, transparent, #e40f2b) !important;
     animation: animate 4s linear infinite;
 }
 
@@ -174,10 +174,12 @@ input:valid~label {
 /* sec-css */
 .sec {
     color: red;
+    height: 30px;
+    padding: 5px 10px 5px 10px;
     margin:0 10px;
     font-size: 15px;
     font-weight: 800;
     background-color: #fff;
     text-align: center;
-    border-radius: 25px;
+    border-radius: 15px;
 }
