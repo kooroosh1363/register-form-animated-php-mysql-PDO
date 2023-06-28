@@ -41,7 +41,7 @@ body {
     position: absolute;
     width: 730px;
     height: 730px;
-    background: conic-gradient(transparent, transparent, transparent, #1fcb04) !important;
+    background: conic-gradient(transparent, transparent, transparent, #ebfe1f) !important;
     animation: animate 4s linear infinite;
     animation-delay: -2s;
 }
@@ -51,7 +51,7 @@ body {
     position: absolute;
     width: 730px;
     height: 730px;
-    background: conic-gradient(transparent, transparent, transparent, #e40f2b) !important;
+    background: conic-gradient(transparent, transparent, transparent, #f90000) !important;
     animation: animate 4s linear infinite;
 }
 
@@ -71,7 +71,7 @@ body {
 .img {
     position: absolute;
     inset: 5px;
-    background-color: #f09e32;
+    background-color: #2f0337;
     z-index: 1;
     border-radius: 15px;
 }
