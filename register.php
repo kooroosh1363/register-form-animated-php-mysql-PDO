@@ -1,105 +1,84 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . '/src/bootstrap.php';
 
-include "./database/pdo_connection.php";
-
-$error = "";
-
-if (
-    isset($_POST['username']) && $_POST['username'] !== ''
-    && isset($_POST['email']) && $_POST['email'] !== ''
-    &&  isset($_POST['password']) && $_POST['password'] !== ''
-    &&  isset($_POST['confirm']) && $_POST['confirm'] !== ''
-) {
-    if ($_POST['password'] === $_POST['confirm']) {
-        if (strlen($_POST['password']) > 4) {
-            $sql = "SELECT * FROM users WHERE email=?";
-            $statement = $conn->prepare($sql);
-            $statement->execute([$_POST['email']]);
-            $user = $statement->fetch();
-            if ($user === false) {
-                if (isset($_POST['sub'])) {
-                    $username = $_POST['username'];
-                    $email = $_POST['email'];
-                    $password = $_POST['password'];
-                    $result = $conn->prepare("INSERT INTO users SET username=? ,email=? ,password=?");
-                    $result->bindValue(1, $username);
-                    $result->bindValue(2, $email);
-                    $result->bindValue(3, $password);
-
-                    $result->execute();
-                }
-            } else {
-                $error = "The email is duplicate!";
-            }
-        } else {
-            $error = "Password is too short! Must be at least five characters!";
-        }
-    } else {
-        $error = "passwords do not match!";
-    }
-} else {
-    if (!empty($_POST)) {
-        $error = "You must fill in all the fields";
-    }
+if (authenticated_user() !== null) {
+    redirect('/dashboard.php');
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = RegistrationValidator::normalize($_POST);
+    $errors = RegistrationValidator::validate($data);
+
+    if (!csrf_is_valid($_POST['_token'] ?? null)) {
+        $errors['form'] = 'Your session expired. Please try again.';
+    }
+
+    if ($errors === []) {
+        $result = $registrationService->register($data, time());
+
+        if ($result['ok'] && is_array($result['user'])) {
+            flash(
+                'registered',
+                'Account created in pending state. Issue a verification link from the CLI, verify the email, then sign in.'
+            );
+            redirect('/login.php');
+        }
+
+        $errors['form'] = $result['error'] ?? 'Unable to create the account.';
+    }
+
+    flash('register_errors', $errors);
+    flash('register_old', ['username'=>$data['username'],'email'=>$data['email']]);
+    redirect('/register.php');
+}
+
+$errors = pull_flash('register_errors', []);
+$old = pull_flash('register_old', []);
+
+function reg_value(array $old, string $field): string {
+    return isset($old[$field]) && is_string($old[$field]) ? $old[$field] : '';
+}
+function reg_error(array $errors, string $field): ?string {
+    return isset($errors[$field]) && is_string($errors[$field]) ? $errors[$field] : null;
+}
 ?>
-
-
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./assets/style.css?v=<?php echo time(); ?>">
-    <title>register-form</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Create a pending VerifyFlow account that must be email-verified before login.">
+<meta name="color-scheme" content="light dark">
+<title>VerifyFlow — Register</title>
+<link rel="stylesheet" href="/assets/style.css">
 </head>
-
 <body>
-    <video autoplay muted loop plays-inline class="video">
-        <source src="./assets/video/ww(2160p).mp4" type="video/mp4">
-    </video>
-    <div class="container">
+<a class="skip-link" href="#register-form">Skip to registration</a>
+<main class="register-shell">
+<section class="register-copy">
+<a class="brand" href="/login.php"><span class="brand-mark">VF</span><span>VerifyFlow</span></a>
+<p class="eyebrow">Registration / 01</p>
+<h1>Create first. Activate second.</h1>
+<p>New accounts are stored as <strong>pending</strong>. Passwords are hashed immediately, and login remains blocked until a valid one-time verification token activates the account.</p>
+<div class="verification-note"><strong>Demo delivery model</strong><p>Instead of pretending to send email, the repository exposes a CLI command that generates the verification link locally.</p></div>
+</section>
 
-        <div class="img">
-            <div class="box-form">
-                <form class="form" action="#" method="Post">
-                    <h2>Register</h2>
-                    <div class="box-input">
-                        <input type="text" name="username" id="name" required>
-                        <label for="name">User Name</label>
-                    </div>
-                    <div class="box-input">
-                        <input type="email" name="email" id="email" required>
-                        <label for="email">Email</label>
-                    </div>
-                    <div class="box-input">
-                        <input type="password" name="password" id="pass" required>
-                        <label for="pass">Password</label>
-                    </div>
-                    <div class="box-input">
-                        <input type="password" name="confirm" id="conf" required>
-                        <label for="conf">RePassword</label>
-                    </div>
-                    <div class="group">
-                        <a href="#" style="color:#cc979e;">Forget Password?</a>
-                        <a href="./login.php">Login</a>
-                    </div>
-                    <button name="sub" class="btn">Sign In</button>
-                    <section class="sec">
-                        <?php
-                        if ($error !== "") echo $error;
-                        ?>
-                    </section>
-                </form>
+<section class="register-card">
+<p class="section-index">Pending account / 01</p>
+<h2>Register</h2>
+<p class="form-intro">Passwords must be at least 12 characters.</p>
+<?php if (($errors['form'] ?? null) !== null): ?><div class="notice notice--error" role="alert"><?= e((string)$errors['form']) ?></div><?php endif; ?>
 
-
-            </div>
-
-        </div>
-    </div>
+<form id="register-form" method="post" action="/register.php" novalidate>
+<input type="hidden" name="_token" value="<?= e(csrf_token()) ?>">
+<div class="field"><label for="username">Username</label><input id="username" name="username" autocomplete="username" maxlength="32" required value="<?= e(reg_value($old,'username')) ?>" <?= reg_error($errors,'username') ? 'aria-invalid="true" aria-describedby="username-error"' : '' ?>><?php if($e=reg_error($errors,'username')):?><p id="username-error" class="field-error"><?=e($e)?></p><?php endif;?></div>
+<div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required value="<?= e(reg_value($old,'email')) ?>" <?= reg_error($errors,'email') ? 'aria-invalid="true" aria-describedby="email-error"' : '' ?>><?php if($e=reg_error($errors,'email')):?><p id="email-error" class="field-error"><?=e($e)?></p><?php endif;?></div>
+<div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required <?= reg_error($errors,'password') ? 'aria-invalid="true" aria-describedby="password-error"' : '' ?>><?php if($e=reg_error($errors,'password')):?><p id="password-error" class="field-error"><?=e($e)?></p><?php endif;?></div>
+<div class="field"><label for="password_confirm">Confirm password</label><input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" minlength="12" maxlength="128" required <?= reg_error($errors,'password_confirm') ? 'aria-invalid="true" aria-describedby="password-confirm-error"' : '' ?>><?php if($e=reg_error($errors,'password_confirm')):?><p id="password-confirm-error" class="field-error"><?=e($e)?></p><?php endif;?></div>
+<button class="primary-button" type="submit">Create pending account →</button>
+</form>
+<p class="switch-link">Already verified? <a href="/login.php">Sign in</a></p>
+</section>
+</main>
 </body>
-
 </html>

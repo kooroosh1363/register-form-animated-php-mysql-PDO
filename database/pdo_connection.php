@@ -1,17 +1,6 @@
-<?php 
-$ServerName="localhost";
-$userName="root";
-$password="";
+<?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/src/bootstrap.php';
 
-try {
-    $conn=new PDO("mysql:host=$ServerName;dbname=animate-form-1",$userName,$password);
-
-    $conn->setAttribute(PDO::ATTR_ERRMODE , PDO::ERRMODE_EXCEPTION);
-
-    // echo "success";
-    
-} catch (PDOException $e) {
-    echo "connection field".$e->getMessage();
-}
-
-?>
+// Legacy compatibility alias. New code should use the PDO instance from bootstrap.php.
+$conn = $pdo;
