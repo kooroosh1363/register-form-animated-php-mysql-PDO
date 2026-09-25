@@ -67,7 +67,7 @@ function exercise_verified_lifecycle(AccountRepository $repo): void {
 
     $reused = $verification->verify($issued['token'], 1005);
     expect_same(false, $reused['ok']);
-});
+}
 
 test('registration validation rejects weak input', function (): void {
     $errors = RegistrationValidator::validate(RegistrationValidator::normalize([
